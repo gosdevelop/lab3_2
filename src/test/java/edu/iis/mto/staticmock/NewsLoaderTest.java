@@ -2,6 +2,8 @@ package edu.iis.mto.staticmock;
 
 import edu.iis.mto.staticmock.reader.NewsReader;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -48,4 +50,12 @@ public class NewsLoaderTest {
         when(PublishableNews.create()).thenReturn(new PublishableNews());
 
     }
+    @Test
+    @Ignore
+    public void checkIfHasOnlyPublicNews() throws Exception {
+        NewsLoader newsLoader = new NewsLoader();
+        PublishableNews news = newsLoader.loadNews();
+
+    }
+
 }
