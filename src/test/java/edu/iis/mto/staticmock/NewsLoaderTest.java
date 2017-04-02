@@ -80,6 +80,7 @@ public class NewsLoaderTest {
         NewsLoader newsLoader = new NewsLoader();
         newsLoader.loadNews();
         verifyStatic(times(1));
+        NewsReaderFactory.getReader(readerType);
 
     }
 
