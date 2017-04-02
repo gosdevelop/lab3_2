@@ -8,9 +8,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 /**
@@ -20,7 +20,10 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @PrepareForTest({ConfigurationLoader.class,NewsReaderFactory.class, PublishableNews.class})
 public class NewsLoaderTest {
     private String readerType;
-
+    private IncomingInfo subTypeNone = new IncomingInfo("subTypeNone", SubsciptionType.NONE);
+    private IncomingInfo subTypeA = new IncomingInfo("subTypeA", SubsciptionType.A);
+    private IncomingInfo subTypeB = new IncomingInfo("subTypeB", SubsciptionType.B);
+    private IncomingInfo subTypeC = new IncomingInfo("subTypeC", SubsciptionType.C);
     @Before
     public void setUp() throws Exception {
         mockStatic(ConfigurationLoader.class);
@@ -32,16 +35,17 @@ public class NewsLoaderTest {
         Whitebox.setInternalState(configuration, "readerType", readerType);
         when(configurationLoader.loadConfiguration()).thenReturn(configuration);
 
-        mockStatic(NewsReaderFactory.class);
         IncomingNews incomingNews = new IncomingNews();
 
-        incomingNews.add(new IncomingInfo("subTypeNone", SubsciptionType.NONE));
-        incomingNews.add(new IncomingInfo("subTypeA", SubsciptionType.A));
-        incomingNews.add(new IncomingInfo("subTypeB", SubsciptionType.B));
-        incomingNews.add(new IncomingInfo("subTypeC", SubsciptionType.C));
+        incomingNews.add(subTypeNone);
+        incomingNews.add(subTypeA);
+        incomingNews.add(subTypeB);
+        incomingNews.add(subTypeC);
 
         NewsReader newsReader = mock(NewsReader.class);
         when(newsReader.read()).thenReturn(incomingNews);
+
+        mockStatic(NewsReaderFactory.class);
         when(NewsReaderFactory.getReader(readerType)).thenReturn(newsReader);
 
         mockStatic(PublishableNews.class);
@@ -52,7 +56,10 @@ public class NewsLoaderTest {
         NewsLoader newsLoader = new NewsLoader();
         PublishableNewsFake publishableNewsFake = (PublishableNewsFake) newsLoader.loadNews();
 
-        assertThat(publishableNewsFake.getPublicContent().get(0), is(equalTo(("subTypeNone"))));
+        assertThat(publishableNewsFake.getPublicContent(), hasItem(subTypeNone.getContent()));
+        assertThat(publishableNewsFake.getPublicContent(), not(hasItem(subTypeA.getContent())));
+        assertThat(publishableNewsFake.getPublicContent(), not(hasItem(subTypeB.getContent())));
+        assertThat(publishableNewsFake.getPublicContent(), not(hasItem(subTypeC.getContent())));
     }
 
 }
