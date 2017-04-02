@@ -20,11 +20,13 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ConfigurationLoader.class,NewsReaderFactory.class, PublishableNews.class})
 public class NewsLoaderTest {
+    private NewsReader newsReader;
     private String readerType;
     private IncomingInfo subTypeNone = new IncomingInfo("subTypeNone", SubsciptionType.NONE);
     private IncomingInfo subTypeA = new IncomingInfo("subTypeA", SubsciptionType.A);
     private IncomingInfo subTypeB = new IncomingInfo("subTypeB", SubsciptionType.B);
     private IncomingInfo subTypeC = new IncomingInfo("subTypeC", SubsciptionType.C);
+
     @Before
     public void setUp() throws Exception {
         mockStatic(ConfigurationLoader.class);
@@ -43,7 +45,7 @@ public class NewsLoaderTest {
         incomingNews.add(subTypeB);
         incomingNews.add(subTypeC);
 
-        NewsReader newsReader = mock(NewsReader.class);
+        newsReader = mock(NewsReader.class);
         when(newsReader.read()).thenReturn(incomingNews);
 
         mockStatic(NewsReaderFactory.class);
