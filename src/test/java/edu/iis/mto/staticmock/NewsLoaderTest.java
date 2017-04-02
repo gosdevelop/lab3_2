@@ -51,6 +51,7 @@ public class NewsLoaderTest {
         mockStatic(PublishableNews.class);
         when(PublishableNews.create()).thenReturn(new PublishableNewsFake());
     }
+
     @Test
     public void checkIfHasOnlyPublicNews() throws Exception {
         NewsLoader newsLoader = new NewsLoader();
@@ -60,6 +61,17 @@ public class NewsLoaderTest {
         assertThat(publishableNewsFake.getPublicContent(), not(hasItem(subTypeA.getContent())));
         assertThat(publishableNewsFake.getPublicContent(), not(hasItem(subTypeB.getContent())));
         assertThat(publishableNewsFake.getPublicContent(), not(hasItem(subTypeC.getContent())));
+    }
+
+    @Test
+    public void checkIfHasOnlySubscribentNews() throws Exception {
+        NewsLoader newsLoader = new NewsLoader();
+        PublishableNewsFake publishableNewsFake = (PublishableNewsFake) newsLoader.loadNews();
+
+        assertThat(publishableNewsFake.getSubscribentContent(), not(hasItem(subTypeNone.getContent())));
+        assertThat(publishableNewsFake.getSubscribentContent(), hasItem(subTypeA.getContent()));
+        assertThat(publishableNewsFake.getSubscribentContent(), hasItem(subTypeB.getContent()));
+        assertThat(publishableNewsFake.getSubscribentContent(), hasItem(subTypeC.getContent()));
     }
 
 }
