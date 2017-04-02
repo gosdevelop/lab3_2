@@ -11,6 +11,7 @@ import org.powermock.reflect.Whitebox;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 /**
@@ -72,6 +73,14 @@ public class NewsLoaderTest {
         assertThat(publishableNewsFake.getSubscribentContent(), hasItem(subTypeA.getContent()));
         assertThat(publishableNewsFake.getSubscribentContent(), hasItem(subTypeB.getContent()));
         assertThat(publishableNewsFake.getSubscribentContent(), hasItem(subTypeC.getContent()));
+    }
+
+    @Test
+    public void checkIfNewsReaderCalledOnce() throws Exception {
+        NewsLoader newsLoader = new NewsLoader();
+        newsLoader.loadNews();
+        verifyStatic(times(1));
+
     }
 
 }
