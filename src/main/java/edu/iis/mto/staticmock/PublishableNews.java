@@ -13,7 +13,7 @@ public class PublishableNews {
 	private final List<String> subscribentContent = new ArrayList<>();
 
 	public void addPublicInfo(String content) {
-		this.publicContent .add(content);
+		this.publicContent.add(content);
 		
 	}
 
